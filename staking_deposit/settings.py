@@ -53,7 +53,7 @@ WeberSetting = BaseChainSetting(
     NETWORK_NAME=WEBER,
     GENESIS_FORK_VERSION=bytes.fromhex("20000089"),
     GENESIS_VALIDATORS_ROOT=bytes.fromhex(
-        "83431ec7fcf92cfc44947fc0418e831c25e1d0806590231c439830db7ad54fda"
+        "bf1a837d0321cb39db467151955b34bafc564bd8e8fdb3aed4697845d5c98136"
     ),
 )
 
