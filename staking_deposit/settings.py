@@ -1,5 +1,6 @@
 from typing import Dict, NamedTuple
 from eth_utils import decode_hex
+import os  # 新增导入
 
 DEPOSIT_CLI_VERSION = "2.8.0"
 
@@ -15,7 +16,7 @@ SEPOLIA = "sepolia"
 HOLESKY = "holesky"
 MEKONG = "mekong"
 WEBER = "weber"
-
+CUSTOM = "custom"
 # Mainnet setting
 MainnetSetting = BaseChainSetting(
     NETWORK_NAME=MAINNET,
@@ -53,9 +54,24 @@ WeberSetting = BaseChainSetting(
     NETWORK_NAME=WEBER,
     GENESIS_FORK_VERSION=bytes.fromhex("20000089"),
     GENESIS_VALIDATORS_ROOT=bytes.fromhex(
-        "bf1a837d0321cb39db467151955b34bafc564bd8e8fdb3aed4697845d5c98136"
+        "83431ec7fcf92cfc44947fc0418e831c25e1d0806590231c439830db7ad54fda"
     ),
 )
+
+# Custom setting
+CustomSetting = BaseChainSetting(
+    NETWORK_NAME=os.getenv("CUSTOM_NETWORK_NAME", "Weber"),
+    GENESIS_FORK_VERSION=bytes.fromhex(
+        os.getenv("CUSTOM_GENESIS_FORK_VERSION", "20000089")
+    ),  # 从环境变量读取
+    GENESIS_VALIDATORS_ROOT=bytes.fromhex(
+        os.getenv(
+            "CUSTOM_GENESIS_VALIDATORS_ROOT",
+            "bf1a837d0321cb39db467151955b34bafc564bd8e8fdb3aed4697845d5c98136",
+        )
+    ),  # 从环境变量读取
+)
+print(CustomSetting)
 
 
 ALL_CHAINS: Dict[str, BaseChainSetting] = {
@@ -64,6 +80,7 @@ ALL_CHAINS: Dict[str, BaseChainSetting] = {
     HOLESKY: HoleskySetting,
     MEKONG: MekongSetting,
     WEBER: WeberSetting,
+    CUSTOM: CustomSetting,
 }
 
 

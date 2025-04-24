@@ -58,3 +58,22 @@ build_docker:
 
 run_docker:
 	@docker run -it --rm $(DOCKER_IMAGE) $(filter-out $@,$(MAKECMDGOALS))
+
+prepare_release: venv_test venv_lint
+	@echo "准备发布版本，确保已更新版本号"
+
+release: prepare_release build_macos build_linux build_docker
+	@echo "所有平台构建完成，现在可以手动创建 GitHub Release 并上传相关文件"
+
+
+# 记录, 复制到命令行执行 {"data":{"genesis_time":"1745394023","genesis_validators_root":"0xbf1a837d0321cb39db467151955b34bafc564bd8e8fdb3aed4697845d5c98136","genesis_fork_version":"0x20000089"}}
+export-custom-env:
+	export CUSTOM_GENESIS_VALIDATORS_ROOT=bf1a837d0321cb39db467151955b34bafc564bd8e8fdb3aed4697845d5c98136
+	export CUSTOM_GENESIS_FORK_VERSION=20000089
+	export CUSTOM_NETWORK_NAME=Weber
+	echo "CUSTOM_GENESIS_VALIDATORS_ROOT: $(CUSTOM_GENESIS_VALIDATORS_ROOT)"
+	echo "CUSTOM_GENESIS_FORK_VERSION: $(CUSTOM_GENESIS_FORK_VERSION)"
+	echo "CUSTOM_NETWORK_NAME: $(CUSTOM_NETWORK_NAME)"
+
+
+
