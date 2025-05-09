@@ -78,10 +78,11 @@ export-custom-env:
 
 
 existing-mnemonic:
-	dist/deposit existing-mnemonic --num_validators=1 --chain=custom  --eth1_withdrawal_address=0x6038b38D1435C45b527A47c9b31f29f181F5Cc12
-
-
-
+	docker run -it -v $(pwd)/validator_keys:/app/validator_keys \
+	-e CUSTOM_GENESIS_VALIDATORS_ROOT=bf1a837d0321cb39db467151955b34bafc564bd8e8fdb3aed4697845d5c98136 \
+	-e CUSTOM_GENESIS_FORK_VERSION=20000089 \
+	-e CUSTOM_NETWORK_NAME=Weber \
+	ethereum/staking-deposit-cli:latest existing-mnemonic --num_validators=1 --chain=custom  --eth1_withdrawal_address=0x6038b38D1435C45b527A47c9b31f29f181F5Cc12
 
 
 uv_run_deposit:
@@ -93,3 +94,5 @@ uv_run_deposit:
 	uv pip install ./build_configs/linux/requirements.txt
 	export PYTHONPATH=$(pwd)
 	python3 ./staking_deposit/deposit.py existing-mnemonic --num_validators=1 --chain=custom  --eth1_withdrawal_address=0x6038b38D1435C45b527A47c9b31f29f181F5Cc12
+
+
