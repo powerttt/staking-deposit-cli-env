@@ -53,6 +53,7 @@ build_linux: venv_build
 	export PYTHONHASHSEED=42; \
 	$(VENV_ACTIVATE) && pyinstaller ./build_configs/linux/build.spec
 
+
 build_docker:
 	@docker build --pull -t $(DOCKER_IMAGE) .
 
@@ -71,9 +72,24 @@ export-custom-env:
 	export CUSTOM_GENESIS_VALIDATORS_ROOT=bf1a837d0321cb39db467151955b34bafc564bd8e8fdb3aed4697845d5c98136
 	export CUSTOM_GENESIS_FORK_VERSION=20000089
 	export CUSTOM_NETWORK_NAME=Weber
-	echo "CUSTOM_GENESIS_VALIDATORS_ROOT: $(CUSTOM_GENESIS_VALIDATORS_ROOT)"
-	echo "CUSTOM_GENESIS_FORK_VERSION: $(CUSTOM_GENESIS_FORK_VERSION)"
-	echo "CUSTOM_NETWORK_NAME: $(CUSTOM_NETWORK_NAME)"
+	# echo "CUSTOM_GENESIS_VALIDATORS_ROOT: $CUSTOM_GENESIS_VALIDATORS_ROOT"
+	# echo "CUSTOM_GENESIS_FORK_VERSION: $(CUSTOM_GENESIS_FORK_VERSION)"
+	# echo "CUSTOM_NETWORK_NAME: $(CUSTOM_NETWORK_NAME)"
+
+
+existing-mnemonic:
+	dist/deposit existing-mnemonic --num_validators=1 --chain=custom  --eth1_withdrawal_address=0x6038b38D1435C45b527A47c9b31f29f181F5Cc12
 
 
 
+
+
+uv_run_deposit:
+	# 虚拟环境
+	uv venv
+	source $(VENV_NAME)/bin/activate
+	# py版本
+	uv venv --python 3.12.0
+	uv pip install ./build_configs/linux/requirements.txt
+	export PYTHONPATH=$(pwd)
+	python3 ./staking_deposit/deposit.py existing-mnemonic --num_validators=1 --chain=custom  --eth1_withdrawal_address=0x6038b38D1435C45b527A47c9b31f29f181F5Cc12
